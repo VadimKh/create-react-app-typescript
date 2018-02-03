@@ -62,6 +62,8 @@ module.exports = {
     // changing JS code would still trigger a refresh.
   ],
   output: {
+    // Next line is not used in dev but WebpackDevServer crashes without it:
+    path: paths.appBuild,
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
     // This does not produce a real file. It's just the virtual path that is
@@ -116,6 +118,7 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      'library': paths.library
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -176,7 +179,7 @@ module.exports = {
           // In production, we use a plugin to extract that CSS to a file, but
           // in development "style" loader enables hot editing of CSS.
           {
-            test: /\.css$/,
+            test: /(\.css|\.scss|\.sass)$/,
             use: [
               require.resolve('style-loader'),
               {
@@ -205,6 +208,7 @@ module.exports = {
                   ],
                 },
               },
+              require.resolve('sass-loader'),
             ],
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
